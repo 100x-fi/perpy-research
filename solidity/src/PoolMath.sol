@@ -1,33 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
+import {SafeCast} from "@oz/utils/math/SafeCast.sol";
+import {FullMath} from "@perpy-research/libraries/FullMath.sol";
+
 library PoolMath {
-  // price = decimal.Decimal(self.pool_oralce.get_price(market))
-  //       max_skew = decimal.Decimal(self.max_skew)
-  //       skew = self.market_skew_of[market]
-  //       sum_size = (
-  //           -self.counter_trade_states[str(is_long)][market]["size"]
-  //           if is_long
-  //           else self.counter_trade_states[str(is_long)][market]["size"]
-  //       )
-  // weighted_avg_exit_price = (
-  //           (2 * price * sum_size)
-  //           + ((2 * price * skew / max_skew) * sum_size)
-  //           + (price / max_skew * sum_size2)
-  //       ) / (2 * sum_size)
+  using SafeCast for int256;
+  using SafeCast for uint256;
+  using FullMath for uint256;
+
   function calcWeightedAvgExitPrice(
     uint256 price,
     int256 skew,
     uint256 maxSkew,
-    uint256 sumSize,
+    int256 sumSize,
     uint256 sumSizeSquared
   ) public pure returns (uint256) {
-    int256 a = int256(2 * price * sumSize);
-    int256 b = (2 * int256(price) * skew / int256(maxSkew)) * int256(sumSize);
-    uint256 c = price / maxSkew * sumSizeSquared;
-    return (
-      (2 * price * sumSize) + ((2 * price * skew / maxSkew) * sumSize)
-        + (price / maxSkew * sumSizeSquared)
-    ) / (2 * sumSize);
+    int256 a = 2 * int256(price) * sumSize / 1e30;
+    int256 b = (2 * int256(price) * skew / int256(maxSkew)) * sumSize / 1e30;
+    uint256 c = price.mulDiv(sumSizeSquared, maxSkew);
+    int256 d = 2 * sumSize;
+    return ((a + b + c.toInt256()) * 1e30 / d).toUint256();
   }
 }
