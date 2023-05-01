@@ -42,9 +42,9 @@ contract PoolMath_Test is TestBase, StdAssertions {
         t1.price, t1.skew, t1.maxSkew, t1.sumSize, t1.sumSizeSquared
       )
     );
-    // price 60_000 sum_size 100_000_000 skew -100_000_000 max_skew 300_000_000 sum_size2 90_000_000_000_000_000
+    // price 28_000 sum_size 100_000_000 skew -100_000_000 max_skew 300_000_000 sum_size2 90_000_000_000_000_000
     TestParams memory t2 = TestParams({
-      price: 60_000 * 1e30,
+      price: 28_000 * 1e30,
       skew: 300_000_000 * 1e30,
       maxSkew: 300_000_000 * 1e30,
       sumSize: -300_000_000 * 1e30,
