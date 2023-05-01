@@ -22,7 +22,7 @@ contract PoolMath_Test is TestBase, StdAssertions {
       skew: 22000 * 1e30,
       maxSkew: 300000000 * 1e30,
       sumSize: -17000 * 1e30,
-      sumSizeSquared: 129000000 * 1e30
+      sumSizeSquared: 129000000 * 1e60
     });
     console2.log(
       PoolMath.calcWeightedAvgExitPrice(
@@ -35,7 +35,7 @@ contract PoolMath_Test is TestBase, StdAssertions {
       skew: 22000 * 1e30,
       maxSkew: 300000000 * 1e30,
       sumSize: 5000 * 1e30,
-      sumSizeSquared: 13000000 * 1e30
+      sumSizeSquared: 13000000 * 1e60
     });
     console2.log(
       PoolMath.calcWeightedAvgExitPrice(
@@ -48,11 +48,24 @@ contract PoolMath_Test is TestBase, StdAssertions {
       skew: 300_000_000 * 1e30,
       maxSkew: 300_000_000 * 1e30,
       sumSize: -300_000_000 * 1e30,
-      sumSizeSquared: 90_000_000_000_000_000 * 1e30
+      sumSizeSquared: (300_000_000 * 1e30) * (300_000_000 * 1e30)
     });
     console2.log(
       PoolMath.calcWeightedAvgExitPrice(
         t2.price, t2.skew, t2.maxSkew, t2.sumSize, t2.sumSizeSquared
+      )
+    );
+    TestParams memory t3 = TestParams({
+      price: 28_000 * 1e30,
+      skew: 340282366920938463463374607431768211454,
+      maxSkew: 340282366920938463463374607431768211454,
+      sumSize: -340282366920938463463374607431768211454,
+      sumSizeSquared: 340282366920938463463374607431768211454
+        * 340282366920938463463374607431768211454
+    });
+    console2.log(
+      PoolMath.calcWeightedAvgExitPrice(
+        t3.price, t3.skew, t3.maxSkew, t3.sumSize, t3.sumSizeSquared
       )
     );
   }

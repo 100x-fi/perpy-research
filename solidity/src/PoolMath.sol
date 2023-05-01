@@ -18,7 +18,7 @@ library PoolMath {
   ) public pure returns (uint256) {
     int256 a = 2 * int256(price) * sumSize / 1e30;
     int256 b = (2 * int256(price) * skew / int256(maxSkew)) * sumSize / 1e30;
-    uint256 c = price.mulDiv(sumSizeSquared, maxSkew);
+    uint256 c = price.mulDiv(sumSizeSquared, maxSkew) / 1e30;
     int256 d = 2 * sumSize;
     return ((a + b + c.toInt256()) * 1e30 / d).toUint256();
   }
