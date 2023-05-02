@@ -33,19 +33,13 @@ library PoolMath {
         uint256 sumS2E,
         uint256 sumSize,
         bool isLong
-    ) public view returns (int256) {
+    ) public pure returns (int256) {
         sumSE = isLong ? -sumSE : sumSE;
         int256 a = (price.toInt256() * sumSE) / 1e30;
-        console2.logInt(a);
-        // uint256 absSkew = skew < 0 ? (-skew).toUint256() : skew.toUint256();
         int256 b = ((((price.toInt256() * skew) / (maxSkew.toInt256())) *
             sumSE) / 1e30);
-        console2.logInt(b);
-        // uint256 c = (price * maxSkew * sumS2E) / 2;
         uint256 c = price.mulDiv(sumS2E, 2 * maxSkew);
-        console2.log(c);
         int256 d = isLong ? -(sumSize.toInt256()) : sumSize.toInt256();
-        console2.log(d);
         int256 result = a + b + c.toInt256() - d;
         return isLong ? result : -result;
     }
