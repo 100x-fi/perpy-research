@@ -220,6 +220,41 @@ contract PoolMath_Test is TestBase, StdAssertions {
             -979821808.72040414 * 1e30,
             0.0000001 * 1e30
         );
+
+        // price 28051 skew -966598565 max_skew 3000000000 sum_se 1895.12166879448380 sum_s2e 33085929946.8598621 sum_size 38071081
+        // a -53160057.9313540651 b 17128145.2372545693 c 154682.236823227665 d -38071081
+        // globalPnl 2193850.5427237319
+        globalPnl = PoolMath.getGlobalMarketPnl({
+            price: 28051 * 1e30,
+            skew: -966598565 * 1e30,
+            maxSkew: 3000000000 * 1e30,
+            sumSE: 1895.12166879448380 * 1e30,
+            sumS2E: 33085929946.8598621 * 1e30,
+            sumSize: 38071081 * 1e30,
+            isLong: true
+        });
+        assertApproxEqAbs(
+            globalPnl,
+            2193850.5427237319 * 1e30,
+            0.0000001 * 1e30
+        );
+        // price 28051 skew -966598565 max_skew 3000000000 sum_se 47400.4029899650669 sum_s2e 1021303744972.73115 sum_size 1004669646
+        // a 1329628704.27151009 b -428405732.510550342 c 4774765.22503834692 d 1004669646
+        // globalPnl 98671909.014001905
+        globalPnl = PoolMath.getGlobalMarketPnl({
+            price: 28051 * 1e30,
+            skew: -966598565 * 1e30,
+            maxSkew: 3000000000 * 1e30,
+            sumSE: 47400.4029899650669 * 1e30,
+            sumS2E: 1021303744972.73115 * 1e30,
+            sumSize: 1004669646 * 1e30,
+            isLong: false
+        });
+        assertApproxEqAbs(
+            globalPnl,
+            98671909.014001905 * 1e30,
+            0.0000001 * 1e30
+        );
     }
 
     function testCorrectness_CalcWeightedAvgExitPrice() external {
